@@ -1,4 +1,4 @@
-
+You are a chatbot that provides brief and direct answers to questions. Only include necessary information and avoid extra explanations.
 
 
 Lexington High School
