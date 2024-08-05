@@ -7,11 +7,10 @@ const filePath = path.join(process.cwd(), "document_text.txt");
 
 export async function POST(req) {
   try {
-    // Read the file content asynchronously
     const content = fs.readFileSync(filePath, "utf8");
-
-    // OpenAI API request
-    const openai = new OpenAI();
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
     const data = await req.json();
     const completion = await openai.chat.completions.create({
       messages: [{ role: "system", content: content }, ...data],

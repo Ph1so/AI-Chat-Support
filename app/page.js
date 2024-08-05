@@ -3,12 +3,34 @@ import { useState } from "react";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 
 export default function Home() {
-  const [message, setMessage] = useState([
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([
     {
       role: "assistant",
       content: "Hello, how can I help you?",
     },
   ]);
+
+  const sendMessage = async () => {
+    setMessages((messages) => [
+      ...messages,
+      { role: "user", content: message },
+    ]);
+    setMessage("");
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify([...messages, { role: "user", content: message }]),
+    });
+
+    const data = await response.json();
+    setMessages((messages) => [
+      ...messages,
+      { role: "assistant", content: data.message },
+    ]);
+  };
 
   return (
     <Box
@@ -31,7 +53,7 @@ export default function Home() {
         spacing={2}
       >
         <Stack direction="column" spacing={2} flexGrow={1} overflow="auto">
-          {message.map((item, index) => (
+          {messages.map((item, index) => (
             <Box
               key={index}
               display="flex"
@@ -41,10 +63,10 @@ export default function Home() {
             >
               <Box
                 bgcolor={
-                  item.role === "assistant" ? "primary.main" : "secondary.main"
+                  item.role === "assistant" ? "primary.main" : "success.main"
                 }
                 color="white"
-                borderRadius={16}
+                borderRadius={7}
                 padding={2}
                 maxWidth="75%"
               >
@@ -59,8 +81,15 @@ export default function Home() {
             fullWidth
             variant="outlined"
             sx={{ bgcolor: "background.paper" }}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
           />
-          <Button variant="contained" color="primary" sx={{ height: "100%" }}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={sendMessage}
+            sx={{ height: "100%" }}
+          >
             Send
           </Button>
         </Stack>
