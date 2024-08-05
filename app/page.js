@@ -92,11 +92,7 @@ export default function Home() {
                   }
                 >
                   <Box
-                    bgcolor={
-                      item.role === "assistant"
-                        ? "primary.main"
-                        : "success.main"
-                    }
+                    bgcolor={item.role === "assistant" ? "#0C2D57" : "#2979ff"}
                     color="white"
                     borderRadius={7}
                     padding={2}
