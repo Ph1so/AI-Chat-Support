@@ -10,6 +10,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import "./styles.css";
 
 export default function Home() {
   const [message, setMessage] = useState("");
@@ -19,6 +20,7 @@ export default function Home() {
       content: "Hello, how can I help you?",
     },
   ]);
+  const [loading, setLoading] = useState(false); // Add loading state
 
   const sendMessage = async () => {
     setMessages((messages) => [
@@ -26,6 +28,8 @@ export default function Home() {
       { role: "user", content: message },
     ]);
     setMessage("");
+    setLoading(true); // Set loading to true when sending message
+
     const response = await fetch("/api/chat", {
       method: "POST",
       headers: {
@@ -39,6 +43,7 @@ export default function Home() {
       ...messages,
       { role: "assistant", content: data.message },
     ]);
+    setLoading(false); // Set loading to false when response is received
   };
 
   const theme = useTheme();
@@ -58,7 +63,7 @@ export default function Home() {
         spacing={2}
         justifyContent="center"
         alignItems="stretch"
-        style={{ flex: 1 }}
+        style={{ flex: 1, overflow: "hidden" }}
       >
         <Grid
           item
@@ -101,8 +106,21 @@ export default function Home() {
                   </Box>
                 </Box>
               ))}
+              {/* Show loading animation if loading */}
+              {loading && (
+                <Typography variant="body1" className="loading-dots">
+                  {" "}
+                </Typography>
+              )}
             </Stack>
-            <Stack direction="row" spacing={1} padding={2}>
+            <Box
+              component="footer"
+              display="flex"
+              alignItems="center"
+              padding={2}
+              sx={{ bgcolor: "background.paper", borderTop: "1px solid #ddd" }}
+              style={{ marginTop: "auto" }}
+            >
               <TextField
                 label="Message"
                 fullWidth
@@ -115,11 +133,11 @@ export default function Home() {
                 variant="contained"
                 color="primary"
                 onClick={sendMessage}
-                sx={{ height: "100%" }}
+                sx={{ height: "100%", ml: 1 }}
               >
                 Send
               </Button>
-            </Stack>
+            </Box>
           </Stack>
         </Grid>
       </Grid>
