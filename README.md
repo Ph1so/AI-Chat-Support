@@ -1,4 +1,4 @@
-Student Companion - AI Chat Bot
+Student Companion - AI Chat Bot for Lexington High School
 ----
 
 Here is an example of it being used: 
