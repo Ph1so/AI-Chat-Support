@@ -1,6 +1,5 @@
-Student Companion
+Student Companion - AI Chat Bot
 ----
-This is Student Companion, an AI Chat Bot I built trained off Lexington High School's data
 
 Here is an example of it being used: 
 
