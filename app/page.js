@@ -6,7 +6,8 @@ import {
   Stack,
   TextField,
   Typography,
-  Grid,
+  Dialog,
+  DialogContent,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
@@ -17,9 +18,10 @@ export default function Home() {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      content: "Hello, how can I help you?",
+      content: "Hello, I'm the LHS Virtual Assistant. How can I help you?",
     },
   ]);
+  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false); // Add loading state
 
   const sendMessage = async () => {
@@ -49,36 +51,65 @@ export default function Home() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   return (
     <Box
       width="100vw"
       height="100vh"
       display="flex"
       flexDirection="column"
-      sx={{ bgcolor: "background.default", overflow: "hidden" }}
+      sx={{
+        bgcolor: "background.default",
+        overflow: "hidden",
+        position: "relative",
+      }}
     >
-      <Grid
-        container
-        direction={isMobile ? "column" : "row"}
-        spacing={2}
-        justifyContent="center"
-        alignItems="stretch"
-        style={{ flex: 1, overflow: "hidden" }}
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleOpen}
+        sx={{
+          position: "fixed",
+          bottom: 16,
+          left: 16,
+          zIndex: 10,
+        }}
       >
-        <Grid
-          item
-          xs={12}
-          md={6}
-          style={{ display: "flex", flexDirection: "column", height: "100%" }}
+        Chat
+      </Button>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        PaperProps={{
+          sx: {
+            position: "fixed",
+            bottom: 30,
+            left: -16,
+            width: "300px",
+            maxWidth: "100%",
+            height: "400px",
+            maxHeight: "100%",
+            borderRadius: 2,
+            boxShadow: 3,
+          },
+        }}
+        hideBackdrop
+      >
+        <DialogContent
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            height: "100%",
+            padding: 2,
+            bgcolor: "background.default",
+          }}
         >
           <Stack
-            padding={2}
             direction="column"
             width="100%"
             height="100%"
-            borderRadius={2}
-            border="1px solid #ddd"
-            sx={{ boxShadow: 3 }}
             spacing={2}
             style={{ display: "flex", flexDirection: "column", height: "100%" }}
           >
@@ -114,7 +145,10 @@ export default function Home() {
               display="flex"
               alignItems="center"
               padding={2}
-              sx={{ bgcolor: "background.paper", borderTop: "1px solid #ddd" }}
+              sx={{
+                bgcolor: "background.paper",
+                borderTop: "1px solid #ddd",
+              }}
               style={{ marginTop: "auto" }}
             >
               <TextField
@@ -135,8 +169,8 @@ export default function Home() {
               </Button>
             </Box>
           </Stack>
-        </Grid>
-      </Grid>
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 }
